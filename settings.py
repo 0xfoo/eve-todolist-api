@@ -14,14 +14,16 @@ user_schema = {
         'required': True,
         'unique': True
     },
-    'joined_at': {
-        'type': 'datetime'
-    }
+    'password': {
+        'type': 'string',
+        'minlength': 1,
+        'maxlength': 64,
+        'required': True
+    },
 }
 
-
 user = {
-    'item_title': 'person',
+    'item_title': 'user',
     'additional_lookup': {
         'url': 'regex("[\w]+")',
         'field': 'username'
@@ -32,10 +34,62 @@ user = {
     'schema': user_schema
 }
 
+todolist_schema = {
+    'title': {
+        'type': 'string',
+        'minlength': 1,
+        'maxlength': 128,
+        'required': True
+    },
+    'creator': {
+        'type': 'string'
+    },
+    'todos': {},
+}
+
+todolist = {
+    'item_title': 'todolist',
+    'additional_lookup': {
+        'url': 'regex("[\w]+")',
+        # 'field': '_id'
+        'field': 'title'
+    },
+    'cache_control': 'max-age=10,must-revalidate',
+    'cache_expires': 10,
+    'resource_methods': ['GET', 'POST', 'DELETE'],
+    'schema': todolist_schema
+}
+
+todo_schema = {
+    'description': {
+        'type': 'string',
+        'minlength': 1,
+        'maxlength': 128,
+        'required': True
+    },
+    'creator': {
+        'type': 'string'
+    },
+    'todolist': {},
+}
+
+todo = {
+    'item_title': 'todo',
+    'additional_lookup': {
+        'url': 'regex("[\w]+")',
+        # 'field': '_id'
+        'field': 'description'
+    },
+    'cache_control': 'max-age=10,must-revalidate',
+    'cache_expires': 10,
+    'resource_methods': ['GET', 'POST', 'DELETE'],
+    'schema': todo_schema
+}
+
 DOMAIN = {
-    'user': {},
-    'todolists': {},
-    'todos': {}
+    'users': user,
+    'todolists': todolist,
+    'todos': todo
 }
 
 # mongo db settings
@@ -44,6 +98,3 @@ MONGO_PORT = 27017
 MONGO_USERNAME = ''
 MONGO_PASSWORD = ''
 MONGO_DBNAME = 'apitest'
-
-# RESOURCE_METHODS = ['GET', 'POST', 'DELETE']
-# ITEM_METHODS = ['GET', 'PATCH', 'PUT', 'DELETE']
